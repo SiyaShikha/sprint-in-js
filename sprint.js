@@ -1,29 +1,39 @@
 import { commands } from "./commands.js";
 
-const inputCode = prompt("Enter sprint code : ")
-  .split(" ")
-  .map((e) => +e);
+const getInputCode = () => {
+  const inputCode = prompt("Enter sprint code : ");
+  return inputCode.split(" ").map((e) => +e);
+};
 
-const finalCode = Array.from(inputCode);
-finalCode.unshift(0);
+const getCodeCopy = (inputCode) => {
+  const codeCopy = Array.from(inputCode);
+  codeCopy.unshift(0);
+  return codeCopy;
+};
 
-const runCode = (cellNumber) => {
-  const command = finalCode[cellNumber];
+const execute = (codeCopy, cellNumber) => {
+  const command = codeCopy[cellNumber];
   if (command in commands) {
-    return commands[command]([finalCode, cellNumber]);
+    return commands[command]([codeCopy, cellNumber]);
   }
 };
 
+const display = (inputCode, outputCode) => {
+  console.log("\nINPUT\n", inputCode);
+  outputCode.shift();
+  console.log("\nOUTPUT\n", outputCode);
+};
+
 const start = () => {
+  const inputCode = getInputCode();
+  const codeCopy = getCodeCopy(inputCode);
   let cellNumber = 1;
 
-  while (finalCode[cellNumber] !== 9) {
-    cellNumber = runCode(cellNumber);
+  while (codeCopy[cellNumber] !== 9) {
+    cellNumber = execute(codeCopy, cellNumber);
   }
 
-  console.log(inputCode);
-  finalCode.shift();
-  console.log(finalCode);
+  display(inputCode, codeCopy);
 };
 
 start();
