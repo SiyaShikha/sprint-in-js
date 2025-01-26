@@ -1,10 +1,56 @@
 import { describe, it } from "jsr:@std/testing/bdd";
-import { assertEquals } from "jsr:@std/assert";
-import { getCodeCopy, sprintRunner } from "../src/sprintLib.js";
+import {
+  assert,
+  assertEquals,
+  assertFalse,
+  assertThrows,
+} from "jsr:@std/assert";
+import {
+  getCodeCopy,
+  isValidNum,
+  parseInputCode,
+  sprintRunner,
+} from "../src/sprintLib.js";
 
 describe("getCodeCopy", () => {
   it("should return a new array with 0 unshifted to it", () => {
     assertEquals(getCodeCopy([1, 2, 3, 4, 5]), [0, 1, 2, 3, 4, 5]);
+  });
+});
+
+describe("isValidNum", () => {
+  it("should return true, for a positive integer", () => {
+    assert(isValidNum(10));
+  });
+
+  it("should return true, for a zero", () => {
+    assert(isValidNum(0));
+  });
+
+  it("should return false, for negative number", () => {
+    assertFalse(isValidNum(-1));
+  });
+});
+
+describe("parseInputCode", () => {
+  it("should parse string of space-separated numbers into an array of numbers", () => {
+    assertEquals(parseInputCode("0 1 2 3 4"), [0, 1, 2, 3, 4]);
+  });
+
+  it("should throw error when input contains negative numbers", () => {
+    const expectedErr = { type: "invalid input" };
+    const err = assertThrows(() => {
+      parseInputCode("1 2 -3");
+    });
+    assertEquals(err.type, expectedErr.type);
+  });
+
+  it("should throw error when input contains non-numeric values", () => {
+    const expectedErr = { type: "invalid input" };
+    const err = assertThrows(() => {
+      parseInputCode("a b c d");
+    });
+    assertEquals(err.type, expectedErr.type);
   });
 });
 
