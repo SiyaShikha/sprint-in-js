@@ -7,7 +7,7 @@ const isValidNum = (num) => {
 const getInputCode = () => {
   const inputCode = prompt("Enter sprint code : ");
   if (!inputCode) {
-    throw { type: "noInputProvided" };
+    throw { type: "noInputProvided", msg: "Please provide some input!" };
   }
 
   return inputCode;
@@ -18,7 +18,7 @@ const parseInputCode = (code) => {
   code.trim().split(/\s+/).forEach((e) => {
     const num = +e;
     if (!isValidNum(num)) {
-      throw { type: "invalid input" };
+      throw { type: "invalid input", msg: "Invalid input provided!" };
     }
     parsedCode.push(num);
   });
@@ -32,7 +32,7 @@ const execute = (runtimeState, cellNumber) => {
   const command = runtimeState[cellNumber];
 
   if (!(command in commands)) {
-    throw { type: "invalid code" };
+    throw { type: "invalid code", msg: "Check your input and try again!" };
   }
 
   const { code: updatedState, newCellNum } = commands[command](

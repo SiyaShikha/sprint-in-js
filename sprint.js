@@ -6,7 +6,7 @@ const main = () => {
     const { inputCode, executedCode } = sprintRunner(code);
     display(inputCode, executedCode);
   } catch (err) {
-    console.error(err);
+    console.error(err.msg);
     Deno.exit(1);
   }
 };
