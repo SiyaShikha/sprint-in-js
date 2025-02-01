@@ -1,4 +1,5 @@
 import { commands } from "./commands.js";
+import { Memory } from "./memory.js";
 
 const isValidNum = (num) => {
   return Number.isInteger(num) && num >= 0;
@@ -26,21 +27,13 @@ const parseInputCode = (code) => {
   return parsedCode;
 };
 
-const getCodeCopy = (inputCode) => [0, ...inputCode];
-
-const execute = (runtimeState, cellNumber) => {
-  const command = runtimeState[cellNumber];
+const execute = (memory, programCounter) => {
+  const command = memory.getCellValue(programCounter);
 
   if (!(command in commands)) {
     throw { type: "invalid code", msg: "Check your input and try again!" };
   }
-
-  const { code: updatedState, newCellNum } = commands[command](
-    runtimeState,
-    cellNumber,
-  );
-
-  return { updatedState, newCellNum };
+  return commands[command](memory, programCounter);
 };
 
 const display = (inputCode, executedCode) => {
@@ -49,24 +42,20 @@ const display = (inputCode, executedCode) => {
 };
 
 const sprintRunner = (rawInputCode) => {
-  const parsedCode = parseInputCode(rawInputCode);
-  let runtimeState = getCodeCopy(parsedCode);
-  let cellNumber = 1;
+  const data = parseInputCode(rawInputCode);
+  const memory = new Memory(data);
+  let programCounter = 1;
 
-  while (runtimeState[cellNumber] !== 9) {
-    const result = execute(runtimeState, cellNumber);
-    runtimeState = result.updatedState;
-    cellNumber = result.newCellNum;
+  while (memory.getCellValue(programCounter) !== 9) {
+    programCounter = execute(memory, programCounter);
   }
 
-  runtimeState.shift();
-  return { inputCode: parsedCode, executedCode: runtimeState };
+  return { inputCode: data, outputCode: memory.getData() };
 };
 
 export {
   display,
   execute,
-  getCodeCopy,
   getInputCode,
   isValidNum,
   parseInputCode,
