@@ -5,18 +5,7 @@ import {
   assertFalse,
   assertThrows,
 } from "jsr:@std/assert";
-import {
-  getCodeCopy,
-  isValidNum,
-  parseInputCode,
-  sprintRunner,
-} from "../src/sprintLib.js";
-
-describe("getCodeCopy", () => {
-  it("should return a new array with 0 unshifted to it", () => {
-    assertEquals(getCodeCopy([1, 2, 3, 4, 5]), [0, 1, 2, 3, 4, 5]);
-  });
-});
+import { isValidNum, parseInputCode, sprintRunner } from "../src/sprintLib.js";
 
 describe("isValidNum", () => {
   it("should return true, for a positive integer", () => {
@@ -113,7 +102,7 @@ describe("sprintRunner", () => {
         8,
         9,
       ],
-      executedCode: [
+      outputCode: [
         3,
         9,
         1,
